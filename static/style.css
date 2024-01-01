@@ -58,4 +58,31 @@ body {
     color: #666;
 }
 
-/* Add more styles as needed */
+.weather-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.weather-table th, .weather-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.weather-table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.weather-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.weather-table tr:hover {
+    background-color: #ddd;
+}
+
+.weather-table img {
+    height: 30px;
+    width: 30px;
+}
