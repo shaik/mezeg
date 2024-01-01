@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Results for {{ city }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Weather History for {{ city }}</h2>
+    <table>
+        <tr>
+            <th>Year</th>
+            <th>Date</th>
+            <th>Weather</th>
+            <th>Temperature</th>
+            <th>Other Details</th>
+        </tr>
+        {% for year_data in weather_data %}
+            {% for data in year_data['data'] %}
+                <tr>
+                    <td>{{ year_data['year'] }}</td>
+                    <td>{{ data['formatted_date'] }}</td>
+                    <td>
+                        {% if data.get('weather') %}
+                            <img src="http://openweathermap.org/img/wn/{{ data['weather'][0]['icon'] }}.png" alt="{{ data['weather'][0]['main'] }}">
+                            {{ data['weather'][0]['description'] }}
+                        {% else %}
+                            No weather data available
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ data['temp'] }}°C (Feels Like: {{ data['feels_like'] }}°C)
+                    </td>
+                    <td>
+                        Humidity: {{ data['humidity'] }}%<br>
+                        Pressure: {{ data['pressure'] }} hPa<br>
+                        Wind Speed: {{ data['wind_speed'] }} m/s<br>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <div class="form-section">
+        <form id="weatherForm" action="{{ url_for('get_weather') }}" method="post">
+            <label for="countrySelect">Country:</label>
+            <select name="country" id="countrySelect" class="select-dropdown">
+                {% for country in countries %}
+                    <option value="{{ country }}" {{ 'selected' if country == default_country else '' }}>{{ country }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <label for="citySelect">City:</label>
+            <select name="city" id="citySelect" class="select-dropdown">
+                {% for city in cities %}
+                    <option value="{{ city }}" {{ 'selected' if city == 'Porto' else '' }}>{{ city }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <label for="datePicker">Date:</label>
+            <input type="date" id="datePicker" name="date" class="select-dropdown">
+            <br><br>
+            <input type="submit" value="Get Weather" class="submit-button">
+        </form>
+    </div>
+
+    <div id="weatherData" class="weather-data">
+        <!-- Weather data will be displayed here -->
+    </div>
+</body>
+</html>
