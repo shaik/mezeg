@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
-
 import pandas as pd
-import requests
+from weather_api import get_cached_weather_data
 
-api_key = ''
+#  usage url: https://home.openweathermap.org/statistics/onecall_30
+
+api_key = 'e3ab35232ec5dc39d6b5224071a00a84'
 
 app = Flask(__name__)
 cities_df = pd.read_csv('data/worldcities.csv')
@@ -32,6 +33,8 @@ def cities():
 @app.route('/get_weather', methods=['POST'])
 def get_weather():
     city = request.form.get('city')
+    country = request.form.get('country')
+
     selected_date = datetime.strptime(request.form.get('date'), '%Y-%m-%d')
 
     city_data = cities_df[cities_df['city'] == city].iloc[0]
@@ -45,9 +48,11 @@ def get_weather():
         for j in range(NUM_DAYS):
             date_to_fetch = datetime(year, selected_date.month, selected_date.day) + timedelta(days=j)
             unix_time = int(date_to_fetch.timestamp())
-            response = requests.get(f"https://api.openweathermap.org/data/3.0/onecall/timemachine?lat={lat}&lon={lon}&dt={unix_time}&appid={api_key}")
-            if response.status_code == 200:
-                daily_data = response.json()['data'][0]
+
+            daily_data_response = get_cached_weather_data(city, country, unix_time, api_key, cities_df)
+
+            if daily_data_response and 'data' in daily_data_response and daily_data_response['data']:
+                daily_data = daily_data_response['data'][0]
                 daily_data['formatted_date'] = date_to_fetch.strftime('%Y-%m-%d')
                 if 'temp' in daily_data:
                     daily_data['temp'] = K2C(daily_data['temp'])
