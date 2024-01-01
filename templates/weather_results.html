@@ -7,37 +7,35 @@
 <body>
     <h2>Weather History for {{ city }}</h2>
     <table class="weather-table">
+    <tr>
+        <th>Year</th>
+        <th>Day 1</th>
+        <th>Day 2</th>
+        <th>Day 3</th>
+    </tr>
+    {% for year_data in weather_data %}
         <tr>
-            <th>Year</th>
-            <th>Date</th>
-            <th>Weather</th>
-            <th>Temperature</th>
-            <th>Other Details</th>
-        </tr>
-        {% for year_data in weather_data %}
+            <td>{{ year_data['year'] }}</td>
             {% for data in year_data['data'] %}
-                <tr>
-                    <td>{{ year_data['year'] }}</td>
-                    <td>{{ data['formatted_date'] }}</td>
-                    <td>
-                        {% if data.get('weather') %}
-                            <img src="http://openweathermap.org/img/wn/{{ data['weather'][0]['icon'] }}.png" alt="{{ data['weather'][0]['main'] }}">
-                            {{ data['weather'][0]['description'] }}
-                        {% else %}
-                            No weather data available
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ data['temp'] }}°C (Feels Like: {{ data['feels_like'] }}°C)
-                    </td>
-                    <td>
-                        Humidity: {{ data['humidity'] }}%<br>
-                        Pressure: {{ data['pressure'] }} hPa<br>
-                        Wind Speed: {{ data['wind_speed'] }} m/s<br>
-                    </td>
-                </tr>
+                <td>
+                    {{ data['formatted_date'] }}<br>
+                    {% if data.get('weather') %}
+                        <img src="http://openweathermap.org/img/wn/{{ data['weather'][0]['icon'] }}.png"
+                             alt="{{ data['weather'][0]['main'] }}"
+                             class="weather-icon"><br>
+                        {{ data['weather'][0]['description'] }}<br>
+                    {% else %}
+                        No weather data available<br>
+                    {% endif %}
+                    {{ data['temp'] }}°C<br>
+                    (Feels Like: {{ data['feels_like'] }}°C)<br>
+                    Humidity: {{ data['humidity'] }}%<br>
+                    <span class="hidden">Pressure: {{ data['pressure'] }} hPa</span><br>
+                    Wind Speed: {{ data['wind_speed'] }} m/s<br>
+                </td>
             {% endfor %}
-        {% endfor %}
-    </table>
+        </tr>
+    {% endfor %}
+</table>
 </body>
 </html>

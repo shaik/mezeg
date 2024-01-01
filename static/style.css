@@ -59,14 +59,18 @@ body {
 }
 
 .weather-table {
-    width: 100%;
-    border-collapse: collapse;
+    width: auto; /* Adjusts width to content */
+    max-width: 80%; /* Limits to 80% of the screen width */
+    margin: 0 auto; /* Centers the table */
+    table-layout: fixed; /* Evenly distributes column widths */
 }
 
 .weather-table th, .weather-table td {
     border: 1px solid #ddd;
     padding: 8px;
-    text-align: left;
+    text-align: center;
+    word-wrap: break-word; /* Ensures text wraps in cells */
+
 }
 
 .weather-table th {
@@ -82,7 +86,16 @@ body {
     background-color: #ddd;
 }
 
-.weather-table img {
-    height: 30px;
-    width: 30px;
+.weather-icon {
+    height: 50px;
+    width: 50px;
+    vertical-align: middle;
+    background-color: #87CEEB; /* Light sky blue background */
+    border-radius: 50%; /* Circular background */
+    padding: 5px; /* Space around the icon */
+}
+
+
+.hidden {
+    display: none; /* Hide element */
 }
