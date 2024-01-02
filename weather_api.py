@@ -2,7 +2,6 @@ import diskcache as dc
 import json
 import requests
 
-
 cache = dc.Cache('./wo_cache')
 
 
@@ -15,7 +14,7 @@ def _get_weather_data(lat, lon, date, api_key):
         return json.loads(cache[cache_key])
 
     # API call if data not in cache
-    response = requests.get(f"https://api.openweathermap.org/data/3.0/onecall/timemachine?lat={lat}&lon={lon}&dt={date}&appid={api_key}")
+    response = requests.get(f"https://api.openweathermap.org/data/3.0/onecall/day_summary?lat={lat}&lon={lon}&date={date}&appid={api_key}")
     if response.status_code == 200:
         cache[cache_key] = json.dumps(response.json())
         return response.json()

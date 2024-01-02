@@ -5,37 +5,33 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Weather History for {{ city }}</h2>
     <table class="weather-table">
     <tr>
-        <th>Year</th>
-        <th>Day 1</th>
-        <th>Day 2</th>
-        <th>Day 3</th>
+        <th colspan="{{ NUM_DAYS + 1 }}" style="text-align: center;">Weather History for {{ city }}</th>
+    </tr>
+    <tr>
+         <th>Year</th>
+        {% for header in date_headers %}
+            <th>{{ header }}</th>
+        {% endfor %}
     </tr>
     {% for year_data in weather_data %}
-        <tr>
-            <td>{{ year_data['year'] }}</td>
-            {% for data in year_data['data'] %}
-                <td>
-                    {{ data['formatted_date'] }}<br>
-                    {% if data.get('weather') %}
-                        <img src="http://openweathermap.org/img/wn/{{ data['weather'][0]['icon'] }}.png"
-                             alt="{{ data['weather'][0]['main'] }}"
-                             class="weather-icon"><br>
-                        {{ data['weather'][0]['description'] }}<br>
-                    {% else %}
-                        No weather data available<br>
-                    {% endif %}
-                    {{ data['temp'] }}°C<br>
-                    (Feels Like: {{ data['feels_like'] }}°C)<br>
+    <tr>
+        <td>{{ year_data['year'] }}</td>
+        {% for data in year_data['data'] %}
+            <td>
+                {% if data.get('error') %}
+                    {{ data['error'] }}
+                {% else %}
+                    {{ data['min_temp'] }} - {{ data['max_temp'] }}°C<br>
                     Humidity: {{ data['humidity'] }}%<br>
-                    <span class="hidden">Pressure: {{ data['pressure'] }} hPa</span><br>
-                    Wind Speed: {{ data['wind_speed'] }} m/s<br>
-                </td>
-            {% endfor %}
-        </tr>
+                    Wind: {{ data['wind_speed'] }} kph<br>
+                {% endif %}
+            </td>
+        {% endfor %}
+    </tr>
     {% endfor %}
+
 </table>
 </body>
 </html>

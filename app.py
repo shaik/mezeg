@@ -10,12 +10,18 @@ api_key = 'e3ab35232ec5dc39d6b5224071a00a84'
 app = Flask(__name__)
 cities_df = pd.read_csv('data/worldcities.csv')
 NUM_YEARS = 3
-NUM_DAYS = 3
+NUM_DAYS = 7
 
 
-def K2C(kelvin_temp, decimal_places=2):
+def K2C(kelvin_temp):
     celsius_temp = kelvin_temp - 273.15
-    return round(celsius_temp, decimal_places)
+    return round(celsius_temp)
+
+
+def mps_to_kph(speed_mps):
+    speed_kph = speed_mps * 3.6  # 1 m/s is approximately 3.6 kph
+    return round(speed_kph)
+
 
 @app.route('/')
 def index():
@@ -31,40 +37,45 @@ def cities():
     return jsonify(cities)
 
 @app.route('/get_weather', methods=['POST'])
+@app.route('/get_weather', methods=['POST'])
 def get_weather():
     city = request.form.get('city')
     country = request.form.get('country')
-
     selected_date = datetime.strptime(request.form.get('date'), '%Y-%m-%d')
-
-    city_data = cities_df[cities_df['city'] == city].iloc[0]
-    lat = city_data['lat']
-    lon = city_data['lng']
 
     weather_data = []
     for i in range(NUM_YEARS):
         year = selected_date.year - i
         yearly_data = []
         for j in range(NUM_DAYS):
-            date_to_fetch = datetime(year, selected_date.month, selected_date.day) + timedelta(days=j)
-            unix_time = int(date_to_fetch.timestamp())
+            date_to_fetch = (datetime(year, selected_date.month, selected_date.day) + timedelta(days=j)).strftime(
+                '%Y-%m-%d')
 
-            daily_data_response = get_cached_weather_data(city, country, unix_time, api_key, cities_df)
+            daily_data_response = get_cached_weather_data(city, country, date_to_fetch, api_key, cities_df)
 
-            if daily_data_response and 'data' in daily_data_response and daily_data_response['data']:
-                daily_data = daily_data_response['data'][0]
-                daily_data['formatted_date'] = date_to_fetch.strftime('%Y-%m-%d')
-                if 'temp' in daily_data:
-                    daily_data['temp'] = K2C(daily_data['temp'])
-                if 'feels_like' in daily_data:
-                    daily_data['feels_like'] = K2C(daily_data['feels_like'])
+            if daily_data_response:
+                # Extracting required data from response
+                temperature_info = daily_data_response.get('temperature', {})
+                min_temp = K2C(temperature_info.get('min', 0))
+                max_temp = K2C(temperature_info.get('max', 0))
+                wind_speed = mps_to_kph(daily_data_response.get('wind', {}).get('max', {}).get('speed', 0))
+                humidity = daily_data_response.get('humidity', {}).get('afternoon', 0)
+
+                daily_data = {
+                    'date': date_to_fetch,
+                    'min_temp': min_temp,
+                    'max_temp': max_temp,
+                    'humidity': humidity,
+                    'wind_speed': wind_speed
+                }
                 yearly_data.append(daily_data)
             else:
-                yearly_data.append({'error': 'No data', 'date': date_to_fetch.strftime('%Y-%m-%d')})
+                yearly_data.append({'error': 'No data', 'date': date_to_fetch})
         weather_data.append({'year': year, 'data': yearly_data})
 
-    return render_template('weather_results.html', weather_data=weather_data, city=city)
-
+    date_headers = [(selected_date + timedelta(days=j)).strftime('%b %-d') for j in range(NUM_DAYS)]
+    return render_template('weather_results.html', weather_data=weather_data, city=city, date_headers=date_headers,
+                           NUM_DAYS=NUM_DAYS)
 
 if __name__ == '__main__':
     app.run(debug=True)
