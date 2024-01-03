@@ -29,10 +29,11 @@
                     <div class="temperature-container">
                         <span class="temperature-range">{{ data['min_temp'] }} - {{ data['max_temp'] }}°C</span>
                     </div>
+                <!--
                     <div class="weather-clouds">
-                        {{ data['clouds'] }} <!-- ({{ data['cloud_cover']|int }}%) -->
+                        {{ data['clouds'] }}
                      </div>
-
+                -->
                     <div class="weather-detail">
                         <img src="{{ url_for('static', filename='humidity.png') }}" class="weather-icon" alt="Humidity">
                         {{ data['humidity']|int }}%

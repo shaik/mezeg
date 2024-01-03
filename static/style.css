@@ -90,8 +90,8 @@ body {
 .weather-detail {
     display: flex;
     align-items: center;
-    font-size: 0.9em; /* Smaller font size */
-    margin-bottom: 5px; /* Space between each detail */
+    font-size: 0.7em; /* Smaller font size */
+    margin-bottom: 3px; /* Space between each detail */
 }
 
 .weather-icon {
@@ -116,10 +116,10 @@ body {
     color: #007bff; /* A color that stands out, adjust as needed */
 }
 .temperature-container {
-    margin-bottom: 10px; /* Add space below the container */
+    margin-bottom: 6px; /* Add space below the container */
 }
 
 .weather-clouds {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 

@@ -4,12 +4,13 @@ import pandas as pd
 from weather_api import get_cached_weather_data
 
 #  usage url: https://home.openweathermap.org/statistics/onecall_30
+# icon set: https://www.iconpacks.net/free-icon-pack/free-weather-forecast-icon-pack-201.html
 
 api_key = 'e3ab35232ec5dc39d6b5224071a00a84'
 
 app = Flask(__name__)
 cities_df = pd.read_csv('data/worldcities.csv')
-NUM_YEARS = 5
+NUM_YEARS = 4
 NUM_DAYS = 7
 
 
@@ -19,7 +20,10 @@ def get_weather_icon(cloud_cover, precipitation):
     elif precipitation > 2.5:
         return "moderate_rain.png"
     elif precipitation > 0:
-        return "light_rain.png"
+        if cloud_cover < 3/8:
+            return "clear_light_rain.png"
+        else:
+            return "light_rain.png"
     elif cloud_cover > 5/8:
         return "cloudy.png"
     elif cloud_cover > 3/8:
