@@ -99,3 +99,18 @@ body {
 .hidden {
     display: none; /* Hide element */
 }
+
+.humidity-icon {
+    vertical-align: middle;
+    width: 20px; /* Adjust as needed */
+    height: auto;
+}
+
+.temperature-range {
+    font-size: 1.2em; /* Larger font size */
+    color: #007bff; /* A color that stands out, adjust as needed */
+}
+.temperature-container {
+    margin-bottom: 10px; /* Add space below the container */
+}
+

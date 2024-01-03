@@ -23,6 +23,18 @@ def mps_to_kph(speed_mps):
     return round(speed_kph)
 
 
+def get_sky_condition(cloud_cover):
+    if cloud_cover <= 1/8:
+        return "Clear"
+    elif 1/8 < cloud_cover <= 3/8:
+        return "Mostly Clear"
+    elif 3/8 < cloud_cover <= 5/8:
+        return "Partly Cloudy"
+    elif 5/8 < cloud_cover <= 7/8:
+        return "Mostly Cloudy"
+    else:  # cloud_cover > 7/8
+        return "Cloudy"
+
 @app.route('/')
 def index():
     countries = sorted(cities_df['country'].unique())
@@ -60,13 +72,18 @@ def get_weather():
                 max_temp = K2C(temperature_info.get('max', 0))
                 wind_speed = mps_to_kph(daily_data_response.get('wind', {}).get('max', {}).get('speed', 0))
                 humidity = daily_data_response.get('humidity', {}).get('afternoon', 0)
+                precipitation = daily_data_response.get('precipitation', {}).get('total', 0)
+                cloud_cover = daily_data_response.get('cloud_cover', {}).get('afternoon', 0)
 
                 daily_data = {
                     'date': date_to_fetch,
                     'min_temp': min_temp,
                     'max_temp': max_temp,
                     'humidity': humidity,
-                    'wind_speed': wind_speed
+                    'wind_speed': wind_speed,
+                    'precipitation': precipitation,
+                    'cloud_cover': cloud_cover,
+                    'clouds': get_sky_condition(cloud_cover/100)
                 }
                 yearly_data.append(daily_data)
             else:

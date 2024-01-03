@@ -3,6 +3,8 @@
 <head>
     <title>Weather Results for {{ city }}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+
 </head>
 <body>
     <table class="weather-table">
@@ -23,9 +25,16 @@
                 {% if data.get('error') %}
                     {{ data['error'] }}
                 {% else %}
-                    {{ data['min_temp'] }} - {{ data['max_temp'] }}°C<br>
-                    Humidity: {{ data['humidity'] }}%<br>
-                    Wind: {{ data['wind_speed'] }} kph<br>
+                    <div class="temperature-container">
+                        <span class="temperature-range">{{ data['min_temp'] }}°C - {{ data['max_temp'] }}°C</span>
+                    </div>
+                    {{ data['clouds'] }} <!-- ({{ data['cloud_cover']|int }}%) --><br>
+                    <img src="{{ url_for('static', filename='humidity.png') }}" class="humidity-icon" alt="Humidity">
+                    {{ data['humidity']|int }}%<br>
+                    <img src="{{ url_for('static', filename='wind.png') }}" class="humidity-icon" alt="Wind Speed">
+                    {{ data['wind_speed'] }} kph<br>
+                    Precipitation: {{ data['precipitation'] }} mm<br>
+
                 {% endif %}
             </td>
         {% endfor %}
