@@ -25,15 +25,26 @@
                 {% if data.get('error') %}
                     {{ data['error'] }}
                 {% else %}
+                    <img src="{{ url_for('static', filename='weathericons/' ~ data['icon']) }}" alt="Weather Icon">
                     <div class="temperature-container">
-                        <span class="temperature-range">{{ data['min_temp'] }}°C - {{ data['max_temp'] }}°C</span>
+                        <span class="temperature-range">{{ data['min_temp'] }} - {{ data['max_temp'] }}°C</span>
                     </div>
-                    {{ data['clouds'] }} <!-- ({{ data['cloud_cover']|int }}%) --><br>
-                    <img src="{{ url_for('static', filename='humidity.png') }}" class="humidity-icon" alt="Humidity">
-                    {{ data['humidity']|int }}%<br>
-                    <img src="{{ url_for('static', filename='wind.png') }}" class="humidity-icon" alt="Wind Speed">
-                    {{ data['wind_speed'] }} kph<br>
-                    Precipitation: {{ data['precipitation'] }} mm<br>
+                    <div class="weather-clouds">
+                        {{ data['clouds'] }} <!-- ({{ data['cloud_cover']|int }}%) -->
+                     </div>
+
+                    <div class="weather-detail">
+                        <img src="{{ url_for('static', filename='humidity.png') }}" class="weather-icon" alt="Humidity">
+                        {{ data['humidity']|int }}%
+                    </div>
+                    <div class="weather-detail">
+                        <img src="{{ url_for('static', filename='wind.png') }}" class="weather-icon" alt="Wind Speed">
+                        {{ data['wind_speed'] }} kph
+                    </div>
+                    <div class="weather-detail">
+                        <img src="{{ url_for('static', filename='rain.png') }}" class="weather-icon" alt="Precipitation">
+                        {{ data['precipitation'] }} mm
+                    </div>
 
                 {% endif %}
             </td>

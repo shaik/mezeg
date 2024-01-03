@@ -86,13 +86,18 @@ body {
     background-color: #ddd;
 }
 
+
+.weather-detail {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em; /* Smaller font size */
+    margin-bottom: 5px; /* Space between each detail */
+}
+
 .weather-icon {
-    height: 50px;
-    width: 50px;
-    vertical-align: middle;
-    background-color: #87CEEB; /* Light sky blue background */
-    border-radius: 50%; /* Circular background */
-    padding: 5px; /* Space around the icon */
+    width: 20px;
+    height: 20px;
+    margin-right: 5px; /* Space between icon and text */
 }
 
 
@@ -112,5 +117,9 @@ body {
 }
 .temperature-container {
     margin-bottom: 10px; /* Add space below the container */
+}
+
+.weather-clouds {
+    margin-bottom: 10px;
 }
 

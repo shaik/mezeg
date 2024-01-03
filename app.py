@@ -9,8 +9,25 @@ api_key = 'e3ab35232ec5dc39d6b5224071a00a84'
 
 app = Flask(__name__)
 cities_df = pd.read_csv('data/worldcities.csv')
-NUM_YEARS = 3
+NUM_YEARS = 5
 NUM_DAYS = 7
+
+
+def get_weather_icon(cloud_cover, precipitation):
+    if precipitation > 7.6:
+        return "heavy_rain.png"
+    elif precipitation > 2.5:
+        return "moderate_rain.png"
+    elif precipitation > 0:
+        return "light_rain.png"
+    elif cloud_cover > 5/8:
+        return "cloudy.png"
+    elif cloud_cover > 3/8:
+        return "mostly_cloudy.png"
+    elif cloud_cover > 1/8:
+        return "partly_cloudy.png"
+    else:
+        return "clear_sunny.png"
 
 
 def K2C(kelvin_temp):
@@ -74,6 +91,7 @@ def get_weather():
                 humidity = daily_data_response.get('humidity', {}).get('afternoon', 0)
                 precipitation = daily_data_response.get('precipitation', {}).get('total', 0)
                 cloud_cover = daily_data_response.get('cloud_cover', {}).get('afternoon', 0)
+                icon_filename = get_weather_icon(cloud_cover/100, precipitation)
 
                 daily_data = {
                     'date': date_to_fetch,
@@ -83,7 +101,8 @@ def get_weather():
                     'wind_speed': wind_speed,
                     'precipitation': precipitation,
                     'cloud_cover': cloud_cover,
-                    'clouds': get_sky_condition(cloud_cover/100)
+                    'clouds': get_sky_condition(cloud_cover/100),
+                    'icon': icon_filename
                 }
                 yearly_data.append(daily_data)
             else:
