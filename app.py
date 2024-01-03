@@ -56,6 +56,16 @@ def get_sky_condition(cloud_cover):
     else:  # cloud_cover > 7/8
         return "Cloudy"
 
+
+def format_precipitation(precipitation):
+    if precipitation == 0:
+        return "-"
+    elif precipitation < 1:
+        return "<1 mm"
+    else:
+        return f"{round(precipitation)} mm"
+
+
 @app.route('/')
 def index():
     countries = sorted(cities_df['country'].unique())
@@ -103,7 +113,7 @@ def get_weather():
                     'max_temp': max_temp,
                     'humidity': humidity,
                     'wind_speed': wind_speed,
-                    'precipitation': precipitation,
+                    'precipitation': format_precipitation(precipitation),
                     'cloud_cover': cloud_cover,
                     'clouds': get_sky_condition(cloud_cover/100),
                     'icon': icon_filename
