@@ -1,14 +1,16 @@
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 import pandas as pd
+import os
+from dotenv import load_dotenv
 from utils import K2C, mps_to_kph, get_sky_condition, format_precipitation, get_weather_icon
-
 from weather_api import get_cached_weather_data
 
 #  usage url: https://home.openweathermap.org/statistics/onecall_30
 # icon set: https://www.iconpacks.net/free-icon-pack/free-weather-forecast-icon-pack-201.html
 
-api_key = 'e3ab35232ec5dc39d6b5224071a00a84'
+load_dotenv()  # This loads the environment variables from .env file
+api_key = os.environ.get('OPENWEATHERMAP_API_KEY')
 
 app = Flask(__name__)
 cities_df = pd.read_csv('data/worldcities.csv')
