@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 /wo_cache/
 /.idea/runConfigurations/app.xml
+/application_printout.txt
+/aggregated_project.txt
